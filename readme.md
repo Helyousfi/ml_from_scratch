@@ -14,4 +14,6 @@ Cheatsheets:
     - Random scale
     - Random Crop
     - Random Rotate
+  ## Image processing
+    - Convolution from scratch
   
