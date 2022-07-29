@@ -16,4 +16,3 @@ Cheatsheets:
     - Random Rotate
   ## Image processing
     - Convolution from scratch
-  
