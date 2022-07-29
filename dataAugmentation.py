@@ -96,10 +96,10 @@ class RandomCrop:
 
 
 class RandomRotate:
-    def __init__(self, angle = 45):
-        self.angle = angle
+    def __init__(self, max_angle = 45):
+        self.angle = max_angle
     
-    def rotate(self, img, angle, pivot_point):
+    def rotate(self, img, angle, pivot_point=[0,0]):
         # Create rotation matrix
         rotation_matrix = np.array([    [np.cos(angle), -np.sin(angle)],
                                         [np.sin(angle), np.cos(angle)]     ])
@@ -115,13 +115,14 @@ class RandomRotate:
                 new_coords = np.matmul(rotation_matrix, np.array([y - pivot_point_y, x - pivot_point_x]).T)  
                 xp = pivot_point_x + int(new_coords[1])
                 yp = pivot_point_y + int(new_coords[0])
-                rotated_img[yp, xp] = img[y, x]
                 
+                if xp < w and yp < h:
+                    rotated_img[yp, xp] = img[y, x]
+
         return rotated_img
 
     def __call__(self, img, bboxes):
+        angle = random.uniform(0, self.max_angle)
+        rotated_img = self.rotate(img, angle, [img.shape[1]/2, img.shape[0]/2])
 
-
-
-
-
+        return img, bboxes
