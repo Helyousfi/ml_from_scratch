@@ -8,4 +8,10 @@ Cheatsheets:
   ## Machine Learning :
   - Linear regression from scratch
   ## Computer Vision :
-  - Data augmentation
+  - Data augmentation for object detection:
+    - Horizontal flip
+    - Vertical flip
+    - Random scale
+    - Random Crop
+    - Random Rotate
+  
