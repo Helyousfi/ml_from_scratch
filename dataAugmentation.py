@@ -1,5 +1,6 @@
 import random
 import cv2
+import numpy as np
 
 def swap(a, b):
     return b, a
@@ -93,12 +94,34 @@ class RandomCrop:
         
         return img, bboxes
 
+
 class RandomRotate:
     def __init__(self, angle = 45):
         self.angle = angle
     
+    def rotate(self, img, angle, pivot_point):
+        # Create rotation matrix
+        rotation_matrix = np.array([    [np.cos(angle), -np.sin(angle)],
+                                        [np.sin(angle), np.cos(angle)]     ])
+        rotated_img = np.zeros(img.shape)
+
+        pivot_point_x = pivot_point[0]
+        pivot_point_y = pivot_point[1]
+
+        h, w = img.shape
+
+        for y in range(h):
+            for x in range(w):
+                new_coords = np.matmul(rotation_matrix, np.array([y - pivot_point_y, x - pivot_point_x]).T)  
+                xp = pivot_point_x + int(new_coords[1])
+                yp = pivot_point_y + int(new_coords[0])
+                rotated_img[yp, xp] = img[y, x]
+                
+        return rotated_img
+
     def __call__(self, img, bboxes):
-        
+
+
 
 
 
