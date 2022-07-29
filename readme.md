@@ -15,4 +15,4 @@ Cheatsheets:
     - Random Crop
     - Random Rotate
   ## Image processing
-    - Convolution from scratch
+  - Convolution from scratch
