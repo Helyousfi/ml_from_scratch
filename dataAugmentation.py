@@ -97,32 +97,52 @@ class RandomCrop:
 
 class RandomRotate:
     def __init__(self, max_angle = 45):
-        self.angle = max_angle
+        self.angle = random.uniform(0, max_angle)
+        # Create rotation matrix
+        self.rotation_matrix = np.array([    [np.cos(angle), -np.sin(angle)],
+                                             [np.sin(angle), np.cos(angle) ]     ])
     
     def rotate(self, img, angle, pivot_point=[0,0]):
-        # Create rotation matrix
-        rotation_matrix = np.array([    [np.cos(angle), -np.sin(angle)],
-                                        [np.sin(angle), np.cos(angle)]     ])
         rotated_img = np.zeros(img.shape)
 
+        # Pivot point 
         pivot_point_x = pivot_point[0]
         pivot_point_y = pivot_point[1]
 
+        # Get image dimensions
         h, w = img.shape
 
+        # Get xp and yp using rotation matrix
         for y in range(h):
             for x in range(w):
-                new_coords = np.matmul(rotation_matrix, np.array([y - pivot_point_y, x - pivot_point_x]).T)  
+                new_coords = np.matmul(self.rotation_matrix, np.array([y - pivot_point_y, x - pivot_point_x]).T)  
                 xp = pivot_point_x + int(new_coords[1])
                 yp = pivot_point_y + int(new_coords[0])
-                
+
+                # Test if we're still inside the image
                 if xp < w and yp < h:
                     rotated_img[yp, xp] = img[y, x]
 
         return rotated_img
+    
+    def rotate_box(self, angle, bboxes):
+        for k in range(len(bboxes)):
+            [ [bboxes[k][0]] , [bboxes[k][1]] ] = np.matmul(self.rotation_matrix, [ [bboxes[k][0]] , [bboxes[k][1]] ] )
+            [ [bboxes[k][2]] , [bboxes[k][3]] ] = np.matmul(self.rotation_matrix, [ [bboxes[k][2]] , [bboxes[k][3]] ] )
+
+            tmp_x = bboxes[k][0]
+            tmp_y = bboxes[k][1]
+
+            bboxes[k][0] = min(bboxes[k][0], bboxes[k][2])
+            bboxes[k][1] = min(bboxes[k][1], bboxes[k][3])
+
+            bboxes[k][2] = max(tmp_x, bboxes[k][2])
+            bboxes[k][3] = max(tmp_y, bboxes[k][3])
+
+        return bboxes
+
 
     def __call__(self, img, bboxes):
-        angle = random.uniform(0, self.max_angle)
-        rotated_img = self.rotate(img, angle, [img.shape[1]/2, img.shape[0]/2])
-
-        return img, bboxes
+        rotated_img = self.rotate(img, self.angle, [img.shape[1]/2, img.shape[0]/2])
+        rotated_bboxes = self.rotate(self.angle, bboxes)
+        return rotated_img, rotated_bboxes
