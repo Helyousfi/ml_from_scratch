@@ -62,27 +62,25 @@ class Conv2D:
             new_image = np.zeros((image.shape[0] + 2, image.shape[1] + 2)) 
             new_image[1:new_image.shape[0]-1, 1:new_image.shape[1]-1] = image
             image = new_image
-
         elif self.padding == "valid": 
             out_shape = (image.shape[0] - 2, image.shape[1] - 2) 
-
         image_out = np.zeros(out_shape)
+        #TODO : add stride
         for y in range(out_shape[0]):
             for x in range(out_shape[1]):
                 S = 0
-                for n in range(-convFiler.shape[1]//2+1, convFiler.shape[1]//2 + 1):
-                    for m in range(-convFiler.shape[0]//2+1, convFiler.shape[1]//2 + 1):
-                        S += image[y + 1 + n, x + 1 + m] * convFiler[n + convFiler.shape[1]//2, m + convFiler.shape[0]//2]
+                for n in range(-convFiler.shape[0]//2+1, convFiler.shape[0]//2 + 1):
+                    for m in range(-convFiler.shape[1]//2+1, convFiler.shape[1]//2 + 1):
+                        S += image[y + 1 + n, x + 1 + m] * \
+                            convFiler[n + convFiler.shape[1]//2, m + convFiler.shape[0]//2]
                 image_out[y, x] = S
         return image_out
 
-
-    def forward(self, input):
+    def forward(self, input):   # Forward pass to apply convolutions
         self.weights = np.random.rand(self.out_channels,  
                         self.in_channels, *self.filter_shape)
         self.biases = np.random.rand(self.out_channels, 
                         *self.filter_shape)
-
         self.output = np.zeros((self.out_channels, 
                         input.shape[0], input.shape[1]))
         
@@ -91,14 +89,44 @@ class Conv2D:
             for k in range(self.in_channels):
                 s += self.convolution(input[:, :, k], self.weights[i][k])
             self.output [i] = s
+    
+class PoolingLayer:
+    def __init__(self, pool_size=(2, 2), stride=2):
+        self.pool_size = pool_size
+        self.stride = stride
+    
+    def forward(self, input):
+        self.output = np.zeros((input.shape[0]//self.pool_size[0], 
+                                input.shape[1]//self.pool_size[1],
+                                input.shape[2]))
+        for c in range(input.shape[2]):
+            for i in range(0, input.shape[0]-self.stride, self.stride):
+                for j in range(0, input.shape[1]-self.stride, self.stride): 
+                    temp = []
+                    for k1 in range(self.pool_size[0]):
+                        for k2 in range(self.pool_size[1]):
+                            temp.append(input[i+k1][j+k2][c])
+                    self.output[i//self.stride][j//self.stride][c] = np.max(temp)
+        
+class Flatten:
+    def __init__(self):
+        pass
+    def forward(self, input):
+        self.output = []
+        for batch in range(input.shape[0]):
+            for c in range(input.shape[1]):
+                for y in range(input.shape[2]):
+                    for x in range(input.shape[3]):
+                        self.output.append(input[batch][c][y][x])
+        self.output = np.array(self.output)
 
+                
 
         
 if __name__ == "__main__":
-    X = np.ones((5,5,3))
-    Conv_layer = Conv2D(3, 8, (5, 5), (3, 3), 0, "same")
+    X = np.ones((1,5,5,3))
+    Conv_layer = Flatten()
     Conv_layer.forward(X)
-    print("weights shape : ", Conv_layer.weights.shape)
     print("output shape : ", Conv_layer.output.shape)
 
 
