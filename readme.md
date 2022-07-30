@@ -7,6 +7,7 @@ Cheatsheets:
 # What is implemented so far :
   ## Machine Learning :
   - Linear regression from scratch
+  - Neural Network from scratch
   ## Computer Vision :
   - Data augmentation for object detection:
     - Horizontal flip
