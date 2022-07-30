@@ -1,6 +1,6 @@
 import numpy as np
 
-# Define the framework functions 
+# Implement a dense layer from scratch
 class Dense_layer:
     def __init__(self, n_inputs, n_outputs):
         self.weights = np.random.rand(n_inputs, n_outputs)
@@ -8,23 +8,23 @@ class Dense_layer:
     def forward(self, x):
         self.outputs = np.dot(x, self.weights) + self.biases
 
+# Implement the activation functions
 class Activation:
     # Leaky ReLU activation function
     def forward(self, inputs, alpha = 0):
         self.outputs = np.maximum(inputs, alpha * inputs) 
-
 class Softmax:
     # The sum over the axis 1 must be 1
     def forward(self, inputs):
         exp_vals = np.exp(inputs)
         self.outputs = exp_vals / np.sum(exp_vals, axis=1, keepdims=True)
-        
 class Sigmoid:
     # for logistic regression
     def forward(self, inputs):
         self.outputs = 1 / (1 + np.exp(-inputs))
 
-class categorical_crossEntropy:
+# The loss function for classification
+class Categorical_crossEntropy:
     def __init__(self, y_pred, y):
         self.y_pred = y_pred / np.max(y_pred)
         self.y_pred = np.clip(self.y_pred, 1e-7, 1-1e-7)
@@ -38,8 +38,72 @@ class categorical_crossEntropy:
             y_cat[k][y[k]] = 1
         return y_cat
 
+# Conv2d layer
+class Conv2D:
+    def __init__(self, in_channels, out_channels, 
+                input_shape, filter_shape, 
+                stride, padding = "same"):
+        """
+        in_channels : the number of the input image channels
+        out_channels : the number of the output channels
+        input_shape : (W, H) the shape of the image
+        filter_shape : the size of the filter 
+        """
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.input_shape = input_shape
+        self.filter_shape = filter_shape 
+        self.stride = stride
+        self.padding = padding
+    
+    def convolution(self, image, convFiler):
+        if self.padding == "same":
+            out_shape = image.shape
+            new_image = np.zeros((image.shape[0] + 2, image.shape[1] + 2)) 
+            new_image[1:new_image.shape[0]-1, 1:new_image.shape[1]-1] = image
+            image = new_image
 
+        elif self.padding == "valid": 
+            out_shape = (image.shape[0] - 2, image.shape[1] - 2) 
+
+        image_out = np.zeros(out_shape)
+        for y in range(out_shape[0]):
+            for x in range(out_shape[1]):
+                S = 0
+                for n in range(-convFiler.shape[1]//2+1, convFiler.shape[1]//2 + 1):
+                    for m in range(-convFiler.shape[0]//2+1, convFiler.shape[1]//2 + 1):
+                        S += image[y + 1 + n, x + 1 + m] * convFiler[n + convFiler.shape[1]//2, m + convFiler.shape[0]//2]
+                image_out[y, x] = S
+        return image_out
+
+
+    def forward(self, input):
+        self.weights = np.random.rand(self.out_channels,  
+                        self.in_channels, *self.filter_shape)
+        self.biases = np.random.rand(self.out_channels, 
+                        *self.filter_shape)
+
+        self.output = np.zeros((self.out_channels, 
+                        input.shape[0], input.shape[1]))
+        
+        for i in range(self.out_channels):
+            s = np.zeros((input.shape[0], input.shape[1]))
+            for k in range(self.in_channels):
+                s += self.convolution(input[:, :, k], self.weights[i][k])
+            self.output [i] = s
+
+
+        
 if __name__ == "__main__":
+    X = np.ones((5,5,3))
+    Conv_layer = Conv2D(3, 8, (5, 5), (3, 3), 0, "same")
+    Conv_layer.forward(X)
+    print("weights shape : ", Conv_layer.weights.shape)
+    print("output shape : ", Conv_layer.output.shape)
+
+
+
+    """
     # Classification problem
     x = np.array([  [1, 2, 3],
                     [2, 4, 1]  ])
@@ -53,5 +117,6 @@ if __name__ == "__main__":
     L1.forward(x)
     A1.forward(L1.outputs)
     
-    Loss = categorical_crossEntropy(L1.outputs, y)
+    Loss = Categorical_crossEntropy(L1.outputs, y)
     print(Loss.outputs)
+    """
