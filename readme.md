@@ -8,6 +8,12 @@ Cheatsheets:
   ## Machine Learning :
   - Linear regression from scratch
   - Neural Network from scratch
+    - Dense_layer
+    - ConvLayer
+    - FlattenLayer
+    - PoolingLayer
+    - Categorical_crossEntropy
+    - Activation functions
   ## Computer Vision :
   - Data augmentation for object detection:
     - Horizontal flip
