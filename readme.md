@@ -15,6 +15,7 @@ Backprogation for a linear layer :
     - ConvLayer
     - FlattenLayer
     - PoolingLayer
+    - Batch Normalization layer
     - Categorical_crossEntropy
     - Activation functions
     - Backward propagation
