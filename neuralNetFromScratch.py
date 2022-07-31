@@ -1,3 +1,4 @@
+from turtle import forward
 import numpy as np
 
 # Implement a dense layer from scratch
@@ -5,23 +6,40 @@ class Dense_layer:
     def __init__(self, n_inputs, n_outputs):
         self.weights = np.random.rand(n_inputs, n_outputs)
         self.biases = np.random.rand(n_outputs)
+    
     def forward(self, x):
+        self.inputs = x
         self.outputs = np.dot(x, self.weights) + self.biases
+
+    def gradient(self, y_grad):
+        self.grad_weights = np.dot(self.inputs.T, y_grad)
+        self.grad_weights = y_grad
 
 # Implement the activation functions
 class Activation:
     # Leaky ReLU activation function
-    def forward(self, inputs, alpha = 0):
-        self.outputs = np.maximum(inputs, alpha * inputs) 
+    def __init__(self, inputs, alpha = 0):
+        self.inputs = inputs
+        self.alpha = alpha 
+    def forward(self):
+        self.outputs = np.maximum(self.inputs, self.alpha * self.inputs) 
+        
+    def gradient(self):
+        self.grad = np.where(self.inputs>0, self.inputs, self.alpha * self.inputs)
+
 class Softmax:
     # The sum over the axis 1 must be 1
     def forward(self, inputs):
         exp_vals = np.exp(inputs)
         self.outputs = exp_vals / np.sum(exp_vals, axis=1, keepdims=True)
+    def gradient(self, x):
+        self.grads = self.forward(x) * (1 - self.forward(x))
+
 class Sigmoid:
     # for logistic regression
     def forward(self, inputs):
         self.outputs = 1 / (1 + np.exp(-inputs))
+
 
 # The loss function for classification
 class Categorical_crossEntropy:
@@ -38,11 +56,23 @@ class Categorical_crossEntropy:
             y_cat[k][y[k]] = 1
         return y_cat
 
+# The mean squared error
+class MSE:
+    def __init__(self, y, y_pred):
+        self.y_pred = y_pred
+        self.y = y
+
+    def forward(self, y, y_pred):
+        self.output = np.mean((y - y_pred) ** 2)
+    
+    def gradient(self, Y):
+        return 2 * (self.y - self.y_pred)
+
 # Conv2d layer
 class Conv2D:
     def __init__(self, in_channels, out_channels, 
                 input_shape, filter_shape, 
-                stride, padding = "same"):
+                stride = (1, 1), padding = "same"):
         """
         in_channels : the number of the input image channels
         out_channels : the number of the output channels
@@ -57,21 +87,28 @@ class Conv2D:
         self.padding = padding
     
     def convolution(self, image, convFiler):
+        """
+        n_out = [(n_in + 2p - k)/s] + 1
+        """
         if self.padding == "same":
-            out_shape = image.shape
+            padd = 1
+            out_shape = (int((image.shape[0] + 2*padd - convFiler.shape[0])/self.stride[0] + 1),
+                        int((image.shape[0] + 2*padd - convFiler.shape[0])/self.stride[1] + 1))
+            # Add padding to the input image
             new_image = np.zeros((image.shape[0] + 2, image.shape[1] + 2)) 
             new_image[1:new_image.shape[0]-1, 1:new_image.shape[1]-1] = image
             image = new_image
         elif self.padding == "valid": 
-            out_shape = (image.shape[0] - 2, image.shape[1] - 2) 
+            padd = 0
+            out_shape = (int((image.shape[0] + 2*padd - convFiler.shape[0])/self.stride[0] + 1), 
+                        int((image.shape[1] + 2*padd - convFiler.shape[0])/self.stride[1] + 1))             
         image_out = np.zeros(out_shape)
-        #TODO : add stride
         for y in range(out_shape[0]):
             for x in range(out_shape[1]):
                 S = 0
                 for n in range(-convFiler.shape[0]//2+1, convFiler.shape[0]//2 + 1):
                     for m in range(-convFiler.shape[1]//2+1, convFiler.shape[1]//2 + 1):
-                        S += image[y + 1 + n, x + 1 + m] * \
+                        S += image[y*self.stride[0] + 1 + n, x*self.stride[1] + 1 + m] * \
                             convFiler[n + convFiler.shape[1]//2, m + convFiler.shape[0]//2]
                 image_out[y, x] = S
         return image_out
@@ -90,6 +127,8 @@ class Conv2D:
                 s += self.convolution(input[:, :, k], self.weights[i][k])
             self.output [i] = s
     
+
+
 class PoolingLayer:
     def __init__(self, pool_size=(2, 2), stride=2):
         self.pool_size = pool_size
