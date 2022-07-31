@@ -3,6 +3,9 @@ Matrix calculus :
   
 Cheatsheets:
   - https://www.kaggle.com/getting-started/162119
+ 
+Backprogation for a linear layer :
+  - http://cs231n.stanford.edu/handouts/linear-backprop.pdf
 
 # What is implemented so far :
   ## Machine Learning :
