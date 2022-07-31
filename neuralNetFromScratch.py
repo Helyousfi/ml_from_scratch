@@ -1,4 +1,3 @@
-from turtle import forward
 import numpy as np
 
 # Implement a dense layer from scratch
@@ -7,25 +6,26 @@ class Dense_layer:
         self.weights = np.random.rand(n_inputs, n_outputs)
         self.biases = np.random.rand(n_outputs)
     
-    def forward(self, x):
-        self.inputs = x
-        self.outputs = np.dot(x, self.weights) + self.biases
+    def forward(self, inputs):
+        self.inputs = inputs
+        self.outputs = np.dot(self.inputs, self.weights) + self.biases
 
     def gradient(self, y_grad):
         self.grad_weights = np.dot(self.inputs.T, y_grad)
-        self.grad_weights = y_grad
+        self.grad_biases = y_grad
 
 # Implement the activation functions
-class Activation:
+class LeakyReLU:
     # Leaky ReLU activation function
-    def __init__(self, inputs, alpha = 0):
-        self.inputs = inputs
+    def __init__(self, alpha = 0):
         self.alpha = alpha 
-    def forward(self):
-        self.outputs = np.maximum(self.inputs, self.alpha * self.inputs) 
-        
+
+    def forward(self, inputs):
+        self.inputs = inputs
+        self.outputs = np.where(self.inputs>0, self.inputs, self.alpha * self.inputs)
+
     def gradient(self):
-        self.grad = np.where(self.inputs>0, self.inputs, self.alpha * self.inputs)
+        self.grad = np.where(self.inputs>0, 1, self.alpha)
 
 class Softmax:
     # The sum over the axis 1 must be 1
@@ -58,15 +58,14 @@ class Categorical_crossEntropy:
 
 # The mean squared error
 class MSE:
-    def __init__(self, y, y_pred):
-        self.y_pred = y_pred
-        self.y = y
-
     def forward(self, y, y_pred):
-        self.output = np.mean((y - y_pred) ** 2)
+        self.y = y
+        self.y_pred = y_pred
+        self.outputs = np.mean((y - y_pred) ** 2)
     
-    def gradient(self, Y):
-        return 2 * (self.y - self.y_pred)
+    def gradient(self):
+        self.y_grad = 2 * (self.y - self.y_pred)
+
 
 # Conv2d layer
 class Conv2D:
@@ -160,6 +159,28 @@ class Flatten:
         self.output = np.array(self.output)
 
                 
+class BatchNormLayer:
+    def __init__(self, batch_size, in_channels):
+        self.batch_size = batch_size
+        self.in_channels = in_channels
+        self.running_mean = np.ones(self.in_channels)
+        self.running_var = np.ones(self.in_channels)
+        self.epsilon = 0.001
+        self.gamma = 1
+        self.beta = 0
+
+    def forward(self, inputs): # input.shape = batch_size * W * H * C
+        for i in range(self.in_channels):
+            self.running_mean[i] = np.mean(inputs[...,i])
+        for i in range(self.in_channels):
+            self.running_var[i] = np.mean((inputs[...,i] - self.running_mean)**2)
+        self.x_hat = inputs.copy()
+        for i in range(self.in_channels):
+            self.x_hat[i] = (inputs[...,i] - self.running_mean[i]) / (self.running_var[i] + self.epsilon)
+        
+        self.outputs = self.gamma * self.x_hat + self.beta
+    
+
 
         
 if __name__ == "__main__":
