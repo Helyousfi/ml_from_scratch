@@ -28,5 +28,10 @@ Backprogation for a linear layer :
     - Random scale
     - Random Crop
     - Random Rotate
+  - Loading dataset from JSON file
   ## Image processing
   - Convolution from scratch
+  
+  ## Python
+  - Decorators 
+  - Generators
