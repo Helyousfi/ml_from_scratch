@@ -39,7 +39,8 @@ class Sigmoid:
     # for logistic regression
     def forward(self, inputs):
         self.outputs = 1 / (1 + np.exp(-inputs))
-
+    def gradient(self, x):
+        self.grads = -1 / self.forward(x)
 
 # The loss function for classification
 class Categorical_crossEntropy:
@@ -55,6 +56,10 @@ class Categorical_crossEntropy:
         for k in range(len(y)):
             y_cat[k][y[k]] = 1
         return y_cat
+    
+    def gradient(self, y, y_pred):
+        self.outputs = np.dot(y.T, 1/y_pred) + np.dot((1-y).T, -1/(1-y_pred)) #TODO
+
 
 # The mean squared error
 class MSE:
@@ -64,7 +69,7 @@ class MSE:
         self.outputs = np.mean((y - y_pred) ** 2)
     
     def gradient(self):
-        self.y_grad = 2 * (self.y - self.y_pred)
+        self.y_grad = 2 * (self.y - self.y_pred) # dL/dy
 
 
 # Conv2d layer
@@ -124,8 +129,8 @@ class Conv2D:
             s = np.zeros((input.shape[0], input.shape[1]))
             for k in range(self.in_channels):
                 s += self.convolution(input[:, :, k], self.weights[i][k])
-            self.output [i] = s
-    
+            self.output[i] = s
+    #TODO : add backward pass here
 
 
 class PoolingLayer:
