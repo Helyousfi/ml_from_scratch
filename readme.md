@@ -14,6 +14,9 @@ Cheatsheets:
     - PoolingLayer
     - Categorical_crossEntropy
     - Activation functions
+    - Backward propagation
+    - Gradient descent
+    
   ## Computer Vision :
   - Data augmentation for object detection:
     - Horizontal flip
