@@ -140,6 +140,14 @@ class HorizontalFlip:
 
             return img, bboxes
 
+class CutMix:
+    # x_c = M * x_a + (1 - M) * x_b  # M is a mask
+    # y_c = lambda * y_a + (1 - lambda) * y_b  # lambda 
+    pass
+    
+class Cutout:
+    pass
+
 
 if __name__ == "__main__":
     dataset = laodDataset("dataset/train/annotations.json")
