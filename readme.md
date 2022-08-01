@@ -7,6 +7,9 @@ Cheatsheets:
 Backprogation for a linear layer :
   - http://cs231n.stanford.edu/handouts/linear-backprop.pdf
 
+Python :
+  - https://python-course.eu/oop/class-instance-attributes.php
+
 # What is implemented so far :
   ## Machine Learning :
   - Linear regression from scratch
