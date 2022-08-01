@@ -41,6 +41,7 @@ Python :
   - Generators
   
 # TODO :
+  - Implement Evaluation Metrics
   - Implement CutMix
   - Imlement Evaluation Metrics
   - Implement ML models :
