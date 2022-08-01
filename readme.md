@@ -38,4 +38,12 @@ Backprogation for a linear layer :
   
   ## TODO :
   - Implement CutMix
+  - Imlement Evaluation Metrics
+  - Implement ML models :
+    - MLP
+    - Logistic regression
+    - Support Vector machines
+    - Gradient descent
+    - Adam optimizer
+    
  
