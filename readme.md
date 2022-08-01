@@ -41,6 +41,7 @@ Python :
   - Generators
   
 # TODO :
+  - Practice more python
   - Implement Evaluation Metrics
   - Implement CutMix
   - Imlement Evaluation Metrics
@@ -51,4 +52,5 @@ Python :
     - Gradient descent
     - Adam optimizer
   - Keep track of the median value
+  
 
