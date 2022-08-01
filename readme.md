@@ -35,3 +35,7 @@ Backprogation for a linear layer :
   ## Python
   - Decorators 
   - Generators
+  
+  ## TODO :
+  - Implement CutMix
+ 
