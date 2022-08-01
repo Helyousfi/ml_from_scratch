@@ -8,7 +8,8 @@ Backprogation for a linear layer :
   - http://cs231n.stanford.edu/handouts/linear-backprop.pdf
 
 Python :
-  - https://python-course.eu/oop/class-instance-attributes.php
+  - (OOP) https://python-course.eu/oop/class-instance-attributes.php
+  - (Python + JSON) https://python-course.eu/applications-python/json-and-python.php
 
 # What is implemented so far :
   ## Machine Learning :
