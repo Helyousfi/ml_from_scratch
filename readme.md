@@ -45,5 +45,5 @@ Backprogation for a linear layer :
     - Support Vector machines
     - Gradient descent
     - Adam optimizer
-    
+  - Keep track of the median value
  
