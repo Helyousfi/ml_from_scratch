@@ -36,7 +36,7 @@ Backprogation for a linear layer :
   - Decorators 
   - Generators
   
-  ## TODO :
+# TODO :
   - Implement CutMix
   - Imlement Evaluation Metrics
   - Implement ML models :
@@ -46,4 +46,4 @@ Backprogation for a linear layer :
     - Gradient descent
     - Adam optimizer
   - Keep track of the median value
- 
+
