@@ -37,6 +37,7 @@ Python :
   - Convolution from scratch
   
   ## Python
+  - OOP : Encapsulation, Inheritance, data hiding ...
   - Decorators 
   - Generators
   
