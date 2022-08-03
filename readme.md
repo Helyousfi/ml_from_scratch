@@ -43,6 +43,12 @@ Python :
   - Generators
   - Leetode : https://github.com/Garvit244/Leetcode
   
+  ## Common questions on Computer Vision & ML
+  https://www.projectpro.io/article/computer-vision-engineer-interview-questions/450
+  https://www.interviewquery.com/p/computer-vision-interview-questions
+  https://www.mlstack.cafe/blog/computer-vision-interview-questions
+  https://github.com/badtyprr/computer-vision-interview  (coding)
+  
 # TODO :
   - Practice more python
   - Implement Evaluation Metrics
