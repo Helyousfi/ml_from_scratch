@@ -10,6 +10,7 @@ Backprogation for a linear layer :
 Python :
   - (OOP) https://python-course.eu/oop/class-instance-attributes.php
   - (Python + JSON) https://python-course.eu/applications-python/json-and-python.php
+  - Keep track of the median value
 
 # What is implemented so far :
   ## Machine Learning :
@@ -45,13 +46,12 @@ Python :
   - Practice more python
   - Implement Evaluation Metrics
   - Implement CutMix
-  - Imlement Evaluation Metrics
   - Implement ML models :
     - MLP
     - Logistic regression
     - Support Vector machines
     - Gradient descent
     - Adam optimizer
-  - Keep track of the median value
+  
   
 
