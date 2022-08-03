@@ -41,6 +41,7 @@ Python :
   - OOP : Encapsulation, Inheritance, data hiding ...
   - Decorators 
   - Generators
+  - Leetode : https://github.com/Garvit244/Leetcode
   
 # TODO :
   - Practice more python
