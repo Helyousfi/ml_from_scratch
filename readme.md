@@ -50,7 +50,6 @@ Python :
   - https://github.com/badtyprr/computer-vision-interview  (coding)
   
 # TODO :
-  - Practice more python
   - Implement Evaluation Metrics
   - Implement CutMix
   - Implement ML models :
