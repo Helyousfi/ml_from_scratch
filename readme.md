@@ -61,7 +61,6 @@ Python :
   
  
  # TODO Today :
-  - Review OOP in python
   - numpy and matplotlib.
   - Implement K-means, linear reg, logistic reg.
   - Some leetcode algortithms.
