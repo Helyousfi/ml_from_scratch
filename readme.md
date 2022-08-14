@@ -59,9 +59,5 @@ Python :
     - Gradient descent
     - Adam optimizer
   
- 
- # TODO Today :
-  - numpy and matplotlib.
-  - Implement K-means, linear reg, logistic reg.
-  - Some leetcode algortithms.
+
 
